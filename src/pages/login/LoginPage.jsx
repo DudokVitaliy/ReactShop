@@ -1,170 +1,84 @@
-import * as React from "react";
-import Box from "@mui/material/Box";
-import Button from "@mui/material/Button";
-import Checkbox from "@mui/material/Checkbox";
-import CssBaseline from "@mui/material/CssBaseline";
-import FormControlLabel from "@mui/material/FormControlLabel";
-import FormLabel from "@mui/material/FormLabel";
-import FormControl from "@mui/material/FormControl";
-import TextField from "@mui/material/TextField";
-import Typography from "@mui/material/Typography";
-import Stack from "@mui/material/Stack";
-import MuiCard from "@mui/material/Card";
-import { styled } from "@mui/material/styles";
+import React from "react";
+import { Container, Box, Typography, TextField, Button, Card, FormLabel } from "@mui/material";
 import { useFormik } from "formik";
-import * as Yup from 'yup';
+import * as Yup from "yup";
+import { useNavigate } from "react-router";
+import { Link } from "react-router";
 
-const Card = styled(MuiCard)(({ theme }) => ({
-    display: "flex",
-    flexDirection: "column",
-    alignSelf: "center",
-    width: "100%",
-    padding: theme.spacing(4),
-    gap: theme.spacing(2),
-    margin: "auto",
-    [theme.breakpoints.up("sm")]: {
-        maxWidth: "450px",
+const validationSchema = Yup.object({
+  email: Yup.string().email("Невірний формат пошти").required("Пошта обов'язкова"),
+  password: Yup.string().required("Пароль обов'язковий"),
+});
+
+function LoginPage() {
+  const navigate = useNavigate();
+
+  const formik = useFormik({
+    initialValues: { email: "", password: "" },
+    validationSchema,
+    onSubmit: (values) => {
+      const users = JSON.parse(localStorage.getItem("users")) || [];
+      const user = users.find(u => u.email === values.email && u.password === values.password);
+
+      if (user) {
+        navigate("/products");
+      } else {
+        alert("Невірна пошта або пароль!");
+      }
     },
-    boxShadow:
-        "hsla(220, 30%, 5%, 0.05) 0px 5px 15px 0px, hsla(220, 25%, 10%, 0.05) 0px 15px 35px -5px",
-    ...theme.applyStyles("dark", {
-        boxShadow:
-            "hsla(220, 30%, 5%, 0.5) 0px 5px 15px 0px, hsla(220, 25%, 10%, 0.08) 0px 15px 35px -5px",
-    }),
-}));
+  });
 
-const SignInContainer = styled(Stack)(({ theme }) => ({
-    height: "calc((1 - var(--template-frame-height, 0)) * 100dvh)",
-    minHeight: "100%",
-    padding: theme.spacing(2),
-    [theme.breakpoints.up("sm")]: {
-        padding: theme.spacing(4),
-    },
-    "&::before": {
-        content: '""',
-        display: "block",
-        position: "absolute",
-        zIndex: -1,
-        inset: 0,
-        backgroundImage:
-            "radial-gradient(ellipse at 50% 50%, hsl(210, 100%, 97%), hsl(0, 0%, 100%))",
-        backgroundRepeat: "no-repeat",
-        ...theme.applyStyles("dark", {
-            backgroundImage:
-                "radial-gradient(at 50% 50%, hsla(210, 100%, 16%, 0.5), hsl(220, 30%, 5%))",
-        }),
-    },
-}));
+  return (
+    <Container maxWidth="sm" sx={{ mt: 6, mb: 6 }}>
+      <Card sx={{ p: 4, boxShadow: 6, borderRadius: 3 }}>
+        <Typography variant="h4" textAlign="center" mb={3} fontWeight={600} color="primary.main">
+          Вхід
+        </Typography>
 
-const LoginPage = () => {
+        <Box component="form" onSubmit={formik.handleSubmit} sx={{ display: "flex", flexDirection: "column", gap: 2 }}>
+          {[
+            { name: "email", label: "Пошта", type: "email" },
+            { name: "password", label: "Пароль", type: "password" },
+          ].map((field) => (
+            <div key={field.name}>
+              <FormLabel sx={{ mb: 0.5, display: "block", fontWeight: 500 }}>{field.label}</FormLabel>
+              <TextField
+                fullWidth
+                name={field.name}
+                type={field.type}
+                value={formik.values[field.name]}
+                onChange={formik.handleChange}
+                onBlur={formik.handleBlur}
+                error={formik.touched[field.name] && Boolean(formik.errors[field.name])}
+                helperText={formik.touched[field.name] && formik.errors[field.name]}
+                size="small"
+                sx={{ "& .MuiOutlinedInput-root": { borderRadius: 2 } }}
+              />
+            </div>
+          ))}
 
-    const handleSubmit = (values) => {
-       if (values.rememberMe) {
-        localStorage.setItem('user', JSON.stringify(values.email));
-       }
-    };
-    const InitValue = {
-        email: '',
-        password: '',
-        rememberMe: false,
-    };
+          <Button
+            disabled={!formik.isValid || !formik.dirty}
+            type="submit"
+            variant="contained"
+            fullWidth
+            sx={{ mt: 2, py: 1.2, fontSize: "1rem", fontWeight: "bold", borderRadius: 2 }}
+          >
+            Увійти
+          </Button>
 
-    const validSchema = Yup.object({
-        email: Yup.string().email('Невірний формат пошти').required('Обов\'язкове поле'),
-        password: Yup.string().min(6, 'Має містити 6 символів').required('Обов\'язкове поле'),
-    });
+          <Typography textAlign="center" mt={2}>
+            Немає акаунту? <Link to="/register">
+            <Button variant="text" size="small">
+            Зареєструватися
+            </Button>
+            </Link>
 
-    const formik = useFormik({
-        initialValues: InitValue,
-        onSubmit: handleSubmit,
-        validationSchema: validSchema,
-    });
-
-    
-    return (
-        <>
-            <CssBaseline enableColorScheme />
-            <SignInContainer direction="column" justifyContent="space-between">
-                <Card variant="outlined">
-                    <Typography
-                        component="h1"
-                        variant="h4"
-                        sx={{
-                            width: "100%",
-                            fontSize: "clamp(2rem, 10vw, 2.15rem)",
-                        }}
-                    >
-                        Логін
-                    </Typography>
-                    <Box
-                        component="form"
-                        onSubmit={formik.handleSubmit}
-                        noValidate
-                        sx={{
-                            display: "flex",
-                            flexDirection: "column",
-                            width: "100%",
-                            gap: 2,
-                        }}
-                    >
-                        <FormControl>
-                            <FormLabel error = {formik.touched.email && Boolean(formik.errors.email)} htmlFor="email">Пошта</FormLabel>
-                            <TextField
-                                error={formik.touched.email ? Boolean(formik.errors.email) : ""}
-                                helperText={formik.touched.email && formik.errors.email ? formik.errors.email : ""}
-                                id="email"
-                                type="email"
-                                name="email"
-                                placeholder="your@email.com"
-                                autoComplete="email"
-                                autoFocus
-                                required
-                                fullWidth
-                                variant="outlined"
-                                value={formik.values.email}
-                                onChange={formik.handleChange}
-                                onBlur={formik.handleBlur}
-                            />
-                            
-                        </FormControl>
-                        <FormControl>
-                            <FormLabel error= {formik.touched.password && Boolean(formik.errors.password)} htmlFor="password">Пароль</FormLabel>
-                            <TextField
-                            error={formik.touched.password ? Boolean(formik.errors.password) : ""}
-                                name="password"
-                                placeholder="••••••"
-                                type="password"
-                                id="password"
-                                autoComplete="current-password"
-                                autoFocus
-                                required
-                                fullWidth
-                                variant="outlined"
-                                value={formik.values.password}
-                                onChange={formik.handleChange}
-                                onBlur={formik.handleBlur}
-                                helperText={formik.errors.password}
-                            />
-                        </FormControl>
-                        <FormControlLabel
-                            control={
-                                <Checkbox 
-                                    onChange={formik.handleChange}
-                                    checked = {formik.values.rememberMe} 
-                                    name="rememberMe" 
-                                    value="remember" 
-                                    color="primary" />
-                            }
-                            label="Запам'ятати мене"
-                        />
-                        <Button disabled = {!formik.isValid} type="submit" fullWidth variant="contained">
-                            Вхід
-                        </Button>
-                    </Box>
-                </Card>
-            </SignInContainer>
-        </>
-    );
-};
+          </Typography>
+        </Box>
+      </Card>
+    </Container>
+  );
+}
 
 export default LoginPage;

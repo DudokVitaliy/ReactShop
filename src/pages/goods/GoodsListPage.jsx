@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import { Box, Typography, Grid, Container, TextField, Button } from '@mui/material';
 import GoodsCard from '../../components/Cards/GoodsCard';
+import { Link } from "react-router";
 
 const initialGoods = [
   {
@@ -165,7 +166,7 @@ function GoodsListPage() {
       </Typography>
 
       <Box my={2} sx={{ display: 'flex', justifyContent: 'space-evenly', alignItems: 'center' }}>
-        <TextField
+        {/* <TextField
           onChange={(e) => inputChangeHandler(e.target.value, "name")}
           value={inputData.name}
           label="Назва"
@@ -182,10 +183,12 @@ function GoodsListPage() {
           value={inputData.image}
           label="Зображення"
           variant="standard"
-        />
-        <Button onClick={createGoodsHandler} variant="contained" sx={{ ml: 2, mt: 1 }}>
-          Додати
+        /> */}
+        <Link to ={"/add"}>
+        <Button onClick={createGoodsHandler} variant="contained" sx={{ml: 2, mt: 1, px: 3, py: 1.5 }}>
+          Додати новий товар
         </Button>
+        </Link>
       </Box>
 
       <Grid container spacing={2} sx={{ px: 3, py: 5 }}>

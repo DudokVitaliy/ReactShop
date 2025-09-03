@@ -12,6 +12,7 @@ import Button from '@mui/material/Button';
 import Tooltip from '@mui/material/Tooltip';
 import MenuItem from '@mui/material/MenuItem';
 import AdbIcon from '@mui/icons-material/Adb';
+import { Link } from 'react-router';
 
 const pages = ['Категорії', 'Товари', 'Про нас'];
 const settings = ['Profile', 'Account', 'Dashboard', 'Logout'];
@@ -40,24 +41,24 @@ function Navbar() {
     <AppBar position="static">
       <Container maxWidth="xl">
         <Toolbar disableGutters>
-          <AdbIcon sx={{ display: { xs: 'none', md: 'flex' }, mr: 1 }} />
+        <Link to ={"/"} style={{ flexDirection: 'row', display: 'flex', alignItems: 'center' }}>
+          <AdbIcon sx={{ display: { xs: 'none', md: 'flex', color: "white" }, mr: 1 }} />
           <Typography
             variant="h6"
             noWrap
-            component="a"
-            href="#app-bar-with-responsive-menu"
             sx={{
               mr: 2,
               display: { xs: 'none', md: 'flex' },
               fontFamily: 'monospace',
               fontWeight: 700,
               letterSpacing: '.3rem',
-              color: 'inherit',
+              color: 'white',
               textDecoration: 'none',
             }}
           >
             LOGO
           </Typography>
+          </Link>
 
           <Box sx={{ flexGrow: 1, display: { xs: 'flex', md: 'none' } }}>
             <IconButton
@@ -86,19 +87,28 @@ function Navbar() {
               onClose={handleCloseNavMenu}
               sx={{ display: { xs: 'block', md: 'none' } }}
             >
-              {pages.map((page) => (
-                <MenuItem key={page} onClick={handleCloseNavMenu}>
-                  <Typography sx={{ textAlign: 'center' }}>{page}</Typography>
+              <Link to ={"/"}>
+              <MenuItem onClick={handleCloseNavMenu}>
+                  <Typography sx={{ textAlign: 'center' }}>Категорії</Typography>
                 </MenuItem>
-              ))}
+              </Link>
+              <Link to ={"/products"}>
+                <MenuItem onClick={handleCloseNavMenu}>
+                  <Typography sx={{ textAlign: 'center' }}>Товари</Typography>
+                </MenuItem>
+              </Link>
+              <Link to ={"/about"}>
+                <MenuItem onClick={handleCloseNavMenu}>
+                  <Typography sx={{ textAlign: 'center' }}>Про Нас</Typography>
+                </MenuItem>
+              </Link>
             </Menu>
           </Box>
+          <Link to ={"/"}>
           <AdbIcon sx={{ display: { xs: 'flex', md: 'none' }, mr: 1 }} />
           <Typography
             variant="h5"
             noWrap
-            component="a"
-            href="#app-bar-with-responsive-menu"
             sx={{
               mr: 2,
               display: { xs: 'flex', md: 'none' },
@@ -106,29 +116,60 @@ function Navbar() {
               fontFamily: 'monospace',
               fontWeight: 700,
               letterSpacing: '.3rem',
-              color: 'inherit',
+              color: 'white',
               textDecoration: 'none',
             }}
           >
             LOGO
           </Typography>
+          </Link>
           <Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' } }}>
-            {pages.map((page) => (
-              <Button
-                key={page}
+            <Link to ={"/"}>
+            <Button
                 onClick={handleCloseNavMenu}
                 sx={{ my: 2, color: 'white', display: 'block' }}
               >
-                {page}
+                Категорії
               </Button>
-            ))}
+            </Link>
+            <Link to ={"/products"}>
+              <Button
+                onClick={handleCloseNavMenu}
+                sx={{ my: 2, color: 'white', display: 'block' }}
+              >
+                Товари
+              </Button>
+            </Link>
+            <Link to ={"/about"}>
+              <Button
+                onClick={handleCloseNavMenu}
+                sx={{ my: 2, color: 'white', display: 'block' }}
+              >
+                Про нас
+              </Button>
+            </Link>
           </Box>
-          <Box sx={{ flexGrow: 0 }}>
-            <Tooltip title="Open settings">
-              <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
+          <Box>
+            {/*<Tooltip title="Open settings">
+               <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
                 <Avatar alt="Remy Sharp" src="https://png.pngtree.com/thumb_back/fh260/background/20230516/pngtree-avatar-of-a-man-wearing-sunglasses-image_2569096.jpg" />
-              </IconButton>
-            </Tooltip>
+              </IconButton> 
+              </Tooltip>*/}
+              <Link to = {"/login"}>
+              <Button variant='contained' color='secondary'
+                sx={{ m: 1}}
+              >
+                Увійти
+              </Button>
+              </Link>
+              <Link to = {"/register"}>
+              <Button variant='contained' color='secondary'
+                sx={{ m: 1 }}
+              >
+                Зареєструватися
+              </Button>
+              </Link>
+            
             <Menu
               sx={{ mt: '45px' }}
               id="menu-appbar"

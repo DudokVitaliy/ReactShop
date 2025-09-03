@@ -2,6 +2,8 @@ import React from "react";
 import { Container, Box, Typography, TextField, Button, Card, FormLabel } from "@mui/material";
 import { useFormik } from "formik";
 import * as Yup from "yup";
+import { useNavigate } from "react-router";
+import { Link } from "react-router";
 
 const validationSchema = Yup.object({
   firstName: Yup.string().required("Ім'я обов'язкове"),
@@ -20,6 +22,8 @@ const validationSchema = Yup.object({
 });
 
 function RegistrationPage() {
+  const navigate = useNavigate();
+
   const formik = useFormik({
     initialValues: {
       firstName: "",
@@ -33,39 +37,21 @@ function RegistrationPage() {
     validationSchema,
     onSubmit: (values) => {
       const { confirmPassword, ...userData } = values;
-      localStorage.setItem("userData", JSON.stringify(userData));
-      alert("Реєстрація успішна!");
-    //   formik.resetForm();
+      let users = JSON.parse(localStorage.getItem("users")) || [];
+      users.push(userData);
+      localStorage.setItem("users", JSON.stringify(users));
+      navigate("/login");
     },
   });
 
   return (
     <Container maxWidth="sm" sx={{ mt: 6, mb: 6 }}>
-      <Card
-        sx={{
-          p: 4,
-          boxShadow: 6,
-          borderRadius: 3,
-          backgroundColor: "background.paper",
-        }}
-      >
-        <Typography
-          variant="h4"
-          sx={{
-            textAlign: "center",
-            mb: 3,
-            fontWeight: 600,
-            color: "primary.main",
-          }}
-        >
-          Сторінка реєстрації
+      <Card sx={{ p: 4, boxShadow: 6, borderRadius: 3 }}>
+        <Typography variant="h4" textAlign="center" mb={3} fontWeight={600} color="primary.main">
+          Реєстрація
         </Typography>
 
-        <Box
-          component="form"
-          onSubmit={formik.handleSubmit}
-          sx={{ display: "flex", flexDirection: "column", gap: 2 }}
-        >
+        <Box component="form" onSubmit={formik.handleSubmit} sx={{ display: "flex", flexDirection: "column", gap: 2 }}>
           {[
             { name: "firstName", label: "Ім'я" },
             { name: "lastName", label: "Прізвище" },
@@ -76,9 +62,7 @@ function RegistrationPage() {
             { name: "address", label: "Адреса проживання" },
           ].map((field) => (
             <div key={field.name}>
-              <FormLabel sx={{ mb: 0.5, display: "block", fontWeight: 500 }}>
-                {field.label}
-              </FormLabel>
+              <FormLabel sx={{ mb: 0.5, display: "block", fontWeight: 500 }}>{field.label}</FormLabel>
               <TextField
                 fullWidth
                 name={field.name}
@@ -88,32 +72,29 @@ function RegistrationPage() {
                 onBlur={formik.handleBlur}
                 error={formik.touched[field.name] && Boolean(formik.errors[field.name])}
                 helperText={formik.touched[field.name] && formik.errors[field.name]}
-                variant="outlined"
                 size="small"
-                sx={{
-                  "& .MuiOutlinedInput-root": {
-                    borderRadius: 2,
-                  },
-                }}
+                sx={{ "& .MuiOutlinedInput-root": { borderRadius: 2 } }}
               />
             </div>
           ))}
 
           <Button
-            disabled = {!formik.isValid}
+            disabled={!formik.isValid || !formik.dirty}
             type="submit"
             variant="contained"
             fullWidth
-            sx={{
-              mt: 2,
-              py: 1.2,
-              fontSize: "1rem",
-              fontWeight: "bold",
-              borderRadius: 2,
-            }}
+            sx={{ mt: 2, py: 1.2, fontSize: "1rem", fontWeight: "bold", borderRadius: 2 }}
           >
             Зареєструватися
           </Button>
+
+          <Typography textAlign="center" mt={2}>
+            Вже є аккаунт? <Link to="/login">
+              <Button variant="text" size="small">
+                Увійти
+              </Button>
+            </Link>
+          </Typography>
         </Box>
       </Card>
     </Container>

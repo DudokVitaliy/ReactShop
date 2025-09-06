@@ -7,17 +7,34 @@ import LoginPageHW from './pages/login/LoginPageHW.jsx';
 import { Routes, Route} from 'react-router';
 import NotFoundPage from './pages/NotFoundPage/NotFound.jsx';
 import AddProduct from './pages/AddProduct/AddProduct.jsx';
+import CategoryCreatePage from './pages/category/CategoryCreatePage.jsx';
+import CategoryUpdatePage from './pages/category/CategoryUpdatePage.jsx';
+import HomePage from './pages/HomePage/HomePage.jsx';
+import DefaultLayouts from './components/layouts/DefaultLayouts.jsx';
+import UpdateProduct from './pages/goods/UpdateProduct.jsx';
 
 function App() {
   return (
     <>
-      <Navbar/>
       <Routes>
-        <Route path='/' element={<CategoryListPage/>}/>
-        <Route path='/login' element={<LoginPage/>}/>
-        <Route path='/register' element={<LoginPageHW/>}/>
-        <Route path='/products' element={<GoodsListPage/>}/>
-        <Route path="/add" element={<AddProduct />} />
+        <Route path='/' element={<DefaultLayouts/>}>
+          <Route index element={<HomePage/>}/>
+              <Route path='/categories'>
+                <Route index element={<CategoryListPage/>}/>
+                <Route path='create' element={<CategoryCreatePage/>}/>
+                <Route path='edit/:name' element={<CategoryUpdatePage/>}/>
+              </Route>
+              
+              <Route path='/products'>
+                <Route index element={<GoodsListPage/>}/>
+                <Route path='create' element={<AddProduct/>}/>
+                <Route path='edit/:name' element={<UpdateProduct/>}/>
+              </Route>
+
+              <Route path='/login' element={<LoginPage/>}/>
+              <Route path='/register' element={<LoginPageHW/>}/>
+        </Route>
+
         <Route path="*" element={<NotFoundPage/>}/>
 
       </Routes>

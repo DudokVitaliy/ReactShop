@@ -1,6 +1,8 @@
-import {useEffect, useState} from 'react';
-import {Box, Typography, Grid, Container, TextField, Button} from '@mui/material';
-import CategoryCard from '../../components/Cards/CategoryCard';
+import { useState, useEffect } from "react";
+import { Typography, Grid, Fab, Box } from "@mui/material";
+import AddIcon from "@mui/icons-material/Add";
+import CategoryCard from "../../components/cards/CategoryCard";
+import { Link } from "react-router";
 const data = [
   {
     id: 1,
@@ -33,62 +35,47 @@ const data = [
     image: 'https://moto-lux.com.ua/content/uploads/images/ecbb4dcde1.jpg'}
 ]
 
-function CategoryListPage() {
+const CategoryListPage = () => {
+    const [categories, setCategories] = useState(data);
 
-  const [inputData, setInputData] = useState({name: '', description: '', image: ''});
-  const [categories, setCategories] = useState(data);
 
-  useEffect(() => {
-    const localData = localStorage.getItem('categories');
-    if (localData) {
-      setCategories(JSON.parse(localData));
-    }
-  }, [])
-
-  const inputChangeHandler = (newValue, prop) => {
-      const newData = {...inputData};
-      newData[prop] = newValue;
-      setInputData(newData);
-  }
-
-    const createCategoryHandler = () => {
-      const newCategory = {
-        id: data.length + 1,
-        name: inputData.name,
-        description: inputData.description,
-        image: inputData.image
-      };
-      if (newCategory.name === '' || newCategory.description === '' || newCategory.image === '') {
-        return;
-      }
-      const newData = [...categories, newCategory];
-      setCategories(newData);
-      setInputData({name: '', description: '', image: ''});
-      localStorage.setItem('categories', JSON.stringify(newData));
+    useEffect(() => {
+        const localData = localStorage.getItem("categories");
+        if (localData) {
+            setCategories(JSON.parse(localData));
+        } else {
+            setCategories(data);
+            localStorage.setItem("categories", JSON.stringify(data));
         }
+    }, []);
 
-  return (
-    <Container>
-      <Typography variant="h3" sx={{textAlign: "center", mb: 4}}>
-        Категорії
-      </Typography>
-      <Box my={2} sx={{display: 'flex', justifyContent: 'Space-evenly', alignItems: 'center'}}> 
-        <TextField onChange={(e) => inputChangeHandler(e.target.value, "name")} value={inputData.name} id = "standard-basic" label = "Назва" variant = "standard"/>
-        <TextField onChange={(e) => inputChangeHandler(e.target.value, "description")} value={inputData.description} id = "standard-basic" label = "Опис" variant = "standard"/>
-        <TextField onChange={(e) => inputChangeHandler(e.target.value, "image")} value={inputData.image} id = "standard-basic" label = "Зображення" variant = "standard"/>
-        <Button onClick={createCategoryHandler} variant="contained" sx={{ml: 2, mt: 1}}>Додати</Button>
-      </Box>
-      <Grid container spacing={1} mx= {3} my= {5}>
-        {
-          categories.map((category) => (
-            <Grid key={category.id} size = {3}>
-              <CategoryCard category={category} />
+    const handleDelete = (name) => {
+        const newCategories = categories.filter(c => c.name !== name);
+        setCategories(newCategories);
+        localStorage.setItem("categories", JSON.stringify(newCategories));
+    }
+
+    return (
+        <>
+            <Typography variant="h3" sx={{ textAlign: "center" }}>
+                Категорії
+            </Typography>
+            <Grid container spacing={1} mx={3} mt={5} mb={2}>
+                {categories.map((category, index) => (
+                    <Grid key={index} size={3}>
+                        <CategoryCard category={category} deleteCallback={handleDelete} />
+                    </Grid>
+                ))}
             </Grid>
-          ))
-        }
-      </Grid>
-    </Container>
-  )
-    }
+            <Box sx={{ textAlign: "end", mb: 2, mx: 4 }}>
+                <Link to="create">
+                    <Fab color="primary" aria-label="add">
+                        <AddIcon />
+                    </Fab>
+                </Link>
+            </Box>
+        </>
+    );
+};
 
 export default CategoryListPage;

@@ -3,12 +3,14 @@ import CardContent from '@mui/material/CardContent';
 import CardMedia from '@mui/material/CardMedia';
 import Typography from '@mui/material/Typography';
 import CardActionArea from '@mui/material/CardActionArea';
-import { Button } from '@mui/material';
+import { Button, Box, Fab } from '@mui/material';
+import { Link } from 'react-router';
+import DeleteIcon from "@mui/icons-material/Delete";
+import EditIcon from "@mui/icons-material/Edit";
 
-function GoodsCard({ goods, onDelete }) {
+function GoodsCard({ goods, deleteCallback }) {
   return (
     <Card sx={{ maxWidth: 345, height: "100%", display: "flex", flexDirection: "column", justifyContent: "space-between" }}>
-      <CardActionArea>
         <CardMedia
           component="img"
           height="200"
@@ -24,10 +26,27 @@ function GoodsCard({ goods, onDelete }) {
             {goods.description}
           </Typography>
         </CardContent>
-      </CardActionArea>
-      <Button onClick={onDelete}  variant="contained" color="error" sx={{ m: 1 }}>
-        Видалити
-      </Button>
+        <Box sx={{ display: "flex", justifyContent: "end", m: 2 }}>
+                <Link to={`edit/${goods.name}`}>
+                    <Fab
+                        sx={{ mx: 1 }}
+                        size="small"
+                        color="success"
+                        aria-label="edit"
+                    >
+                        <EditIcon />
+                    </Fab>
+                </Link>
+                <Fab
+                    onClick={() => deleteCallback(goods.name)}
+                    sx={{ mx: 1 }}
+                    size="small"
+                    color="error"
+                    aria-label="delete"
+                >
+                    <DeleteIcon />
+                </Fab>
+            </Box>
     </Card>
   );
 }

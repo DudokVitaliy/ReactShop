@@ -87,7 +87,7 @@ function Navbar() {
               onClose={handleCloseNavMenu}
               sx={{ display: { xs: 'block', md: 'none' } }}
             >
-              <Link to ={"/"}>
+              <Link to ={"/categories"}>
               <MenuItem onClick={handleCloseNavMenu}>
                   <Typography sx={{ textAlign: 'center' }}>Категорії</Typography>
                 </MenuItem>
@@ -124,7 +124,7 @@ function Navbar() {
           </Typography>
           </Link>
           <Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' } }}>
-            <Link to ={"/"}>
+            <Link to ={"/categories"}>
             <Button
                 onClick={handleCloseNavMenu}
                 sx={{ my: 2, color: 'white', display: 'block' }}

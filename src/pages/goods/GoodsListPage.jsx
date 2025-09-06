@@ -1,7 +1,8 @@
 import { useEffect, useState } from 'react';
-import { Box, Typography, Grid, Container, TextField, Button } from '@mui/material';
+import { Box, Typography, Grid, Button, Fab } from '@mui/material';
 import GoodsCard from '../../components/Cards/GoodsCard';
 import { Link } from "react-router";
+import AddIcon from "@mui/icons-material/Add";
 
 const initialGoods = [
   {
@@ -153,52 +154,47 @@ function GoodsListPage() {
     localStorage.setItem('goods', JSON.stringify(updatedGoods));
   };
 
-  const deleteGoodsHandler = (index) => {
-    const updatedGoods = goods.filter((_, i) => i !== index);
-    setGoods(updatedGoods);
-    localStorage.setItem('goods', JSON.stringify(updatedGoods));
-  };
+const deleteGoodsHandler = (name) => {
+  const updatedGoods = goods.filter(item => item.name !== name);
+  setGoods(updatedGoods);
+  localStorage.setItem('goods', JSON.stringify(updatedGoods));
+};
+
+
 
   return (
-    <Container>
+    <>
       <Typography variant="h3" sx={{ textAlign: "center", mb: 4 }}>
         Товари
       </Typography>
 
-      <Box my={2} sx={{ display: 'flex', justifyContent: 'space-evenly', alignItems: 'center' }}>
-        {/* <TextField
-          onChange={(e) => inputChangeHandler(e.target.value, "name")}
-          value={inputData.name}
-          label="Назва"
-          variant="standard"
-        />
-        <TextField
-          onChange={(e) => inputChangeHandler(e.target.value, "description")}
-          value={inputData.description}
-          label="Опис"
-          variant="standard"
-        />
-        <TextField
-          onChange={(e) => inputChangeHandler(e.target.value, "image")}
-          value={inputData.image}
-          label="Зображення"
-          variant="standard"
-        /> */}
-        <Link to ={"/add"}>
-        <Button onClick={createGoodsHandler} variant="contained" sx={{ml: 2, mt: 1, px: 3, py: 1.5 }}>
-          Додати новий товар
-        </Button>
-        </Link>
-      </Box>
+      <Box my={2} sx={{ display: 'flex', justifyContent: 'center' }}>
+      <Button
+        component={Link}
+        to="create"
+        variant="contained"
+        sx={{ ml: 2, mt: 1, px: 3, py: 1.5 }}
+      >
+        Додати новий товар
+      </Button>
+    </Box>
+
 
       <Grid container spacing={2} sx={{ px: 3, py: 5 }}>
         {goods.map((item, index) => (
           <Grid key={index} size={3}>
-            <GoodsCard goods={item} onDelete={() => deleteGoodsHandler(index)} />
+            <GoodsCard goods={item} deleteCallback={deleteGoodsHandler} />
           </Grid>
         ))}
       </Grid>
-    </Container>
+      <Box sx={{ textAlign: "end", mb: 2, mx: 4 }}>
+                <Link to="create">
+                    <Fab color="primary" aria-label="add">
+                        <AddIcon />
+                    </Fab>
+                </Link>
+            </Box>
+    </>
   );
 }
 

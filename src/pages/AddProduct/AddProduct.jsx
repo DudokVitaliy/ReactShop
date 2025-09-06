@@ -2,6 +2,7 @@ import { useNavigate } from "react-router";
 import { Formik, Form, Field, ErrorMessage } from "formik";
 import * as Yup from "yup";
 import { Container, TextField, Button, Typography, Box } from "@mui/material";
+import { Link } from "react-router";
 
 const validationSchema = Yup.object({
   name: Yup.string().required("Назва обов'язкова"),
@@ -25,7 +26,7 @@ function AddProduct() {
           const storedGoods = JSON.parse(localStorage.getItem("goods")) || [];
           const updatedGoods = [...storedGoods, values];
           localStorage.setItem("goods", JSON.stringify(updatedGoods));
-          navigate("/products");
+          navigate(-1);
         }}
       >
         {({ handleChange }) => (
@@ -62,11 +63,17 @@ function AddProduct() {
                 fullWidth
               />
               <ErrorMessage name="image" component="div" style={{ color: "red" }} />
-
-              <Button type="submit" variant="contained" color="primary">
-                Додати товар
-              </Button>
             </Box>
+            <Box>
+                    <Button type="submit" sx={{ m: 1 }} variant="contained">
+                        Додати
+                    </Button>
+                    <Link to={-1}>
+                        <Button sx={{ m: 1 }} color="error" variant="contained">
+                            Скасувати
+                        </Button>
+                    </Link>
+                </Box>
           </Form>
         )}
       </Formik>

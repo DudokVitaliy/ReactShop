@@ -18,6 +18,7 @@ function Footer() {
             <li><Link to="/" style={{ textDecoration: "none", color: "#f8f9fa" }}>Головна</Link></li>
             <li><Link to="/categories" style={{ textDecoration: "none", color: "#f8f9fa" }}>Категорії</Link></li>
             <li><Link to="/products" style={{ textDecoration: "none", color: "#f8f9fa" }}>Товари</Link></li>
+            <li><Link to="/weather" style={{ textDecoration: "none", color: "#f8f9fa" }}>Погода</Link></li>
             <li><Link to="/login" style={{ textDecoration: "none", color: "#f8f9fa" }}>Логін/Реєстрація</Link></li>
           </ul>
         </div>

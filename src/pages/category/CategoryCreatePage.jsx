@@ -1,7 +1,9 @@
 import { Box, Typography, TextField, Button } from "@mui/material";
 import { useFormik } from "formik";
-import { Link, useNavigate } from "react-router";
+import { Link, useNavigate, useLocation } from "react-router";
 import * as Yup from "yup";
+import ScrollToTop from "../../components/Functional/ScrollToTop";
+
 
 const CategoryCreatePage = () => {
     const navigate = useNavigate();
@@ -33,6 +35,7 @@ const CategoryCreatePage = () => {
         onSubmit: handleSubmit,
         validationSchema: validSchema,
     });
+
 
     return (
             <Box

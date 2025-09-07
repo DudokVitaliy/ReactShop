@@ -12,6 +12,7 @@ import CategoryUpdatePage from './pages/category/CategoryUpdatePage.jsx';
 import HomePage from './pages/HomePage/HomePage.jsx';
 import DefaultLayouts from './components/layouts/DefaultLayouts.jsx';
 import UpdateProduct from './pages/goods/UpdateProduct.jsx';
+import WeatherPage from './pages/WeatherPage/WeatherPage.jsx';
 
 function App() {
   return (
@@ -33,6 +34,7 @@ function App() {
 
               <Route path='/login' element={<LoginPage/>}/>
               <Route path='/register' element={<LoginPageHW/>}/>
+              <Route path='/weather' element={<WeatherPage/>}/>
         </Route>
 
         <Route path="*" element={<NotFoundPage/>}/>

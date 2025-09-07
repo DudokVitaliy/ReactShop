@@ -97,9 +97,9 @@ function Navbar() {
                   <Typography sx={{ textAlign: 'center' }}>Товари</Typography>
                 </MenuItem>
               </Link>
-              <Link to ={"/about"}>
+              <Link to ={"/weather"}>
                 <MenuItem onClick={handleCloseNavMenu}>
-                  <Typography sx={{ textAlign: 'center' }}>Про Нас</Typography>
+                  <Typography sx={{ textAlign: 'center' }}>Погода</Typography>
                 </MenuItem>
               </Link>
             </Menu>
@@ -140,12 +140,12 @@ function Navbar() {
                 Товари
               </Button>
             </Link>
-            <Link to ={"/about"}>
+            <Link to ={"/weather"}>
               <Button
                 onClick={handleCloseNavMenu}
                 sx={{ my: 2, color: 'white', display: 'block' }}
               >
-                Про нас
+                Погода
               </Button>
             </Link>
           </Box>

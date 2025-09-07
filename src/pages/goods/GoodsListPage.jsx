@@ -167,19 +167,6 @@ const deleteGoodsHandler = (name) => {
       <Typography variant="h3" sx={{ textAlign: "center", mb: 4 }}>
         Товари
       </Typography>
-
-      <Box my={2} sx={{ display: 'flex', justifyContent: 'center' }}>
-      <Button
-        component={Link}
-        to="create"
-        variant="contained"
-        sx={{ ml: 2, mt: 1, px: 3, py: 1.5 }}
-      >
-        Додати новий товар
-      </Button>
-    </Box>
-
-
       <Grid container spacing={2} sx={{ px: 3, py: 5 }}>
         {goods.map((item, index) => (
           <Grid key={index} size={3}>

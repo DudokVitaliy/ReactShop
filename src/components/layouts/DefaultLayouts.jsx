@@ -7,9 +7,9 @@ function DefaultLayouts() {
     return (
         <>
             <Navbar/>
-            <Container sx={{minHeight: '80vh', mt: 2, mb: 2}}>
+                <Container sx={{minHeight: '80vh', mt: 2, mb: 2}}>
                 <Outlet/>
-            </Container>
+                </Container>
             <Footer/>
         </>
     );

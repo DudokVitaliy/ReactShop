@@ -1,9 +1,15 @@
 import React from "react";
-import { Container, Box, Typography, TextField, Button, Card, FormLabel } from "@mui/material";
+import { 
+  Container, Box, Typography, TextField, Button, Card, 
+  FormLabel, FormControlLabel, Checkbox 
+} from "@mui/material";
 import { useFormik } from "formik";
 import * as Yup from "yup";
-import { useNavigate } from "react-router";
-import { Link } from "react-router";
+import { useNavigate, Link } from "react-router";
+import { useAuth } from "../../features/context/AuthContex.jsx";
+import { GoogleOAuthProvider, GoogleLogin } from "@react-oauth/google";
+import {jwtDecode} from "jwt-decode";
+
 
 const validationSchema = Yup.object({
   email: Yup.string().email("Невірний формат пошти").required("Пошта обов'язкова"),
@@ -12,25 +18,44 @@ const validationSchema = Yup.object({
 
 function LoginPage() {
   const navigate = useNavigate();
+  const { login, googleLogin } = useAuth();
+
+  const handleSubmit = (values) => {
+    const users = JSON.parse(localStorage.getItem("users")) || [];
+    const user = users.find(u => u.email === values.email && u.password === values.password);
+
+    if (user) {
+      login(values);
+
+      if (values.rememberMe) {
+        localStorage.setItem("rememberedUser", JSON.stringify(user));
+      } else {
+        localStorage.removeItem("rememberedUser");
+      }
+
+      navigate("/");
+    } else {
+      alert("Невірна пошта або пароль!");
+    }
+  };
 
   const formik = useFormik({
-    initialValues: { email: "", password: "" },
+    initialValues: { email: "", password: "", rememberMe: false },
     validationSchema,
-    onSubmit: (values) => {
-      const users = JSON.parse(localStorage.getItem("users")) || [];
-      const user = users.find(u => u.email === values.email && u.password === values.password);
-
-      if (user) {
-        navigate("/products");
-      } else {
-        alert("Невірна пошта або пароль!");
-      }
-    },
+    onSubmit: handleSubmit
   });
+  const handleGoogleSuccess = (response) => {
+    const userData = jwtDecode(response.credential); 
+    googleLogin(userData)
+    navigate("/")
+  }
+  const handleGoogleError = () => {
+    console.log('Login Failed');
+  }
 
   return (
-    <Container maxWidth="sm" sx={{ mt: 6, mb: 6 }}>
-      <Card sx={{ p: 4, boxShadow: 6, borderRadius: 3 }}>
+    <GoogleOAuthProvider  clientId="450543476003-n7ncid6ikuiddsknen94mr53l97723tr.apps.googleusercontent.com">
+      <Card sx={{ p: 4, boxShadow: 6, borderRadius: 3, maxWidth: 400, mx: "auto", mt: 8 }}>
         <Typography variant="h4" textAlign="center" mb={3} fontWeight={600} color="primary.main">
           Вхід
         </Typography>
@@ -57,6 +82,18 @@ function LoginPage() {
             </div>
           ))}
 
+          <FormControlLabel
+            control={
+              <Checkbox
+                name="rememberMe"
+                checked={formik.values.rememberMe}
+                onChange={formik.handleChange}
+
+              />
+            }
+            label="Запам’ятати мене"
+          />
+
           <Button
             disabled={!formik.isValid || !formik.dirty}
             type="submit"
@@ -66,18 +103,21 @@ function LoginPage() {
           >
             Увійти
           </Button>
+          <Box sx={{ display: 'flex', justifyContent: 'center', mt: 2 }}>
+            <GoogleLogin onSuccess={handleGoogleSuccess} onError={handleGoogleError} />
+          </Box>
 
           <Typography textAlign="center" mt={2}>
-            Немає акаунту? <Link to="/register">
-            <Button variant="text" size="small">
-            Зареєструватися
-            </Button>
+            Немає акаунту?{" "}
+            <Link to="/register">
+              <Button variant="text" size="small">
+                Зареєструватися
+              </Button>
             </Link>
-
           </Typography>
         </Box>
       </Card>
-    </Container>
+    </GoogleOAuthProvider>
   );
 }
 

@@ -1,5 +1,4 @@
 import './App.css';
-import Navbar from './components/Navbar/Navbar';
 import CategoryListPage from './pages/category/CategoryListPage.jsx';
 import GoodsListPage from './pages/goods/GoodsListPage.jsx';
 import LoginPage from './pages/login/LoginPage.jsx';
@@ -13,8 +12,28 @@ import HomePage from './pages/HomePage/HomePage.jsx';
 import DefaultLayouts from './components/layouts/DefaultLayouts.jsx';
 import UpdateProduct from './pages/goods/UpdateProduct.jsx';
 import WeatherPage from './pages/WeatherPage/WeatherPage.jsx';
+import { useAuth } from './features/context/AuthContex.jsx';
+import { useEffect } from 'react';
+import ProfilePage from './pages/ProfilePage/ProfilePage.jsx'
+import Navbar from './components/Navbar/Navbar.jsx'
 
 function App() {
+
+  const { login, googleLogin } = useAuth();
+
+  useEffect(() => {
+        const authData = localStorage.getItem("auth");
+        const googleData = localStorage.getItem("googleAuth");
+
+        if (authData) {
+            dispatch({ type: "LOGIN", payload: JSON.parse(authData) });
+            return;
+        }
+        if (googleData) {
+            googleLogin(JSON.parse(googleData));
+        }
+    }, []);
+
   return (
     <>
       <Routes>
@@ -38,6 +57,8 @@ function App() {
         </Route>
 
         <Route path="*" element={<NotFoundPage/>}/>
+        <Route path="/profile" element={<ProfilePage />} />
+
 
       </Routes>
     </>

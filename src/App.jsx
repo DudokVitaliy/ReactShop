@@ -15,7 +15,7 @@ import WeatherPage from './pages/WeatherPage/WeatherPage.jsx';
 import { useAuth } from './features/context/AuthContex.jsx';
 import { useEffect } from 'react';
 import ProfilePage from './pages/ProfilePage/ProfilePage.jsx'
-import Navbar from './components/Navbar/Navbar.jsx'
+import CartPage from './pages/CartPage/CartPage.jsx'
 
 function App() {
 
@@ -54,12 +54,10 @@ function App() {
               <Route path='/login' element={<LoginPage/>}/>
               <Route path='/register' element={<LoginPageHW/>}/>
               <Route path='/weather' element={<WeatherPage/>}/>
+              <Route path="*" element={<NotFoundPage/>}/>
+              <Route path="/profile" element={<ProfilePage />} />
+              <Route path="/cart" element={<CartPage />} />
         </Route>
-
-        <Route path="*" element={<NotFoundPage/>}/>
-        <Route path="/profile" element={<ProfilePage />} />
-
-
       </Routes>
     </>
     

@@ -14,6 +14,11 @@ import MenuItem from '@mui/material/MenuItem';
 import AdbIcon from '@mui/icons-material/Adb';
 import { Link, useNavigate } from 'react-router';
 import { useAuth } from '../../features/context/AuthContex.jsx';
+import { styled, useTheme } from "@mui/material/styles";
+import Badge, { badgeClasses } from "@mui/material/Badge";
+import ShoppingCartIcon from "@mui/icons-material/ShoppingCartOutlined";
+import { colors } from '@mui/material';
+import { useCart } from '../../features/context/CartContext.jsx';
 
 const pages = [
   { name: 'Головна', path: '/' },
@@ -21,6 +26,13 @@ const pages = [
   { name: 'Товари', path: '/products' },
   { name: 'Погода', path: '/weather' }
 ];
+
+const CartBadge = styled(Badge)`
+    & .${badgeClasses.badge} {
+        top: -12px;
+        right: -6px;
+    }
+`;
 
 function Navbar() {
   const { user, logout } = useAuth();
@@ -35,6 +47,7 @@ function Navbar() {
   const handleOpenUserMenu = (event) => setAnchorElUser(event.currentTarget);
   const handleCloseUserMenu = () => setAnchorElUser(null);
 
+  const {cartCount} = useCart();
   return (
     <AppBar position="static">
       <Container maxWidth="xl">
@@ -138,6 +151,24 @@ function Navbar() {
               </>
             )}
           </Box>
+          <Link to={"/cart"}>
+            <Box>
+            <IconButton sx={{ ml: 2 }}>
+              <ShoppingCartIcon
+              sx={{color:"white"}}
+              color="white"
+              fontSize="small"
+            />
+            <CartBadge
+              sx={{color: "white"}}
+              color="error"
+              badgeContent={cartCount()}
+              overlap="circular"
+            />
+            </IconButton>
+            </Box>
+          </Link>
+           
         </Toolbar>
       </Container>
     </AppBar>

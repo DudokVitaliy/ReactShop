@@ -19,12 +19,14 @@ import Badge, { badgeClasses } from "@mui/material/Badge";
 import ShoppingCartIcon from "@mui/icons-material/ShoppingCartOutlined";
 import { colors } from '@mui/material';
 import { useCart } from '../../features/context/CartContext.jsx';
+import { useDispatch, useSelector } from 'react-redux';
 
 const pages = [
   { name: 'Головна', path: '/' },
   { name: 'Категорії', path: '/categories' },
   { name: 'Товари', path: '/products' },
-  { name: 'Погода', path: '/weather' }
+  { name: 'Погода', path: '/weather' },
+  { name: 'Калькулятор', path: '/calculator'}
 ];
 
 const CartBadge = styled(Badge)`
@@ -35,8 +37,10 @@ const CartBadge = styled(Badge)`
 `;
 
 function Navbar() {
-  const { user, logout } = useAuth();
+   //const { user, logout } = useAuth();
+  const {user} = useSelector(state => state.auth);
   const navigate = useNavigate();
+  const dispatch = useDispatch();
 
   const [anchorElNav, setAnchorElNav] = React.useState(null);
   const [anchorElUser, setAnchorElUser] = React.useState(null);
@@ -48,6 +52,22 @@ function Navbar() {
   const handleCloseUserMenu = () => setAnchorElUser(null);
 
   const {cartCount} = useCart();
+
+  const logout = () => {
+    dispatch({type: "LOGOUT"})
+    navigate("/login");
+  }
+   const profile = () => {
+    dispatch({type: "PROFILE"})
+    navigate('/profile')
+  }
+
+
+  const settings = [
+        { name: "Профіль", action: profile },
+        { name: "Вийти", action: logout },
+    ];
+
   return (
     <AppBar position="static">
       <Container maxWidth="xl">
@@ -121,7 +141,22 @@ function Navbar() {
                   anchorOrigin={{ vertical: 'top', horizontal: 'right' }}
                   transformOrigin={{ vertical: 'top', horizontal: 'right' }}
                 >
-                  <MenuItem
+                   {settings.map((setting) => (
+                                <MenuItem
+                                    key={setting.name}
+                                    onClick={() => {
+                                        handleCloseUserMenu();
+                                        if (setting.action) {
+                                            setting?.action();
+                                        }
+                                    }}
+                                >
+                                    <Typography sx={{ textAlign: "center" }}>
+                                        {setting.name}
+                                    </Typography>
+                                </MenuItem>
+                            ))}
+                  {/* <MenuItem
                     onClick={() => {
                       handleCloseUserMenu();
                       navigate("/profile");
@@ -137,7 +172,7 @@ function Navbar() {
                     }}
                   >
                     <Typography textAlign="center">Вийти</Typography>
-                  </MenuItem>
+                  </MenuItem> */}
                 </Menu>
               </>
             ) : (

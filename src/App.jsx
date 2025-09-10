@@ -16,10 +16,13 @@ import { useAuth } from './features/context/AuthContex.jsx';
 import { useEffect } from 'react';
 import ProfilePage from './pages/ProfilePage/ProfilePage.jsx'
 import CartPage from './pages/CartPage/CartPage.jsx'
+import { useDispatch } from 'react-redux';
+import CalculatorPage from './pages/CalculatorPage/CalculatorPage.jsx';
 
 function App() {
 
   const { login, googleLogin } = useAuth();
+  const dispatch = useDispatch();
 
   useEffect(() => {
         const authData = localStorage.getItem("auth");
@@ -57,6 +60,7 @@ function App() {
               <Route path="*" element={<NotFoundPage/>}/>
               <Route path="/profile" element={<ProfilePage />} />
               <Route path="/cart" element={<CartPage />} />
+              <Route path='/calculator' element={<CalculatorPage/>} />
         </Route>
       </Routes>
     </>

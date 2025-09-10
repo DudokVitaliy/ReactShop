@@ -1,10 +1,10 @@
 import React, { useState } from "react";
 import { Container, Card, Typography, Box, TextField, Button, Divider } from "@mui/material";
-import { useAuth } from "../../features/context/AuthContex.jsx";
+import { useSelector } from "react-redux";
 import { useNavigate } from "react-router";
 
 function ProfilePage() {
-  const { user } = useAuth();
+  const user = useSelector(state => state.auth.user); // отримуємо користувача з Redux
   const [oldPass, setOldPass] = useState("");
   const [newPass, setNewPass] = useState("");
   const [message, setMessage] = useState("");

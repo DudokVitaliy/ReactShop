@@ -1,6 +1,5 @@
-import React from "react";
 import { 
-  Container, Box, Typography, TextField, Button, Card, 
+  Box, Typography, TextField, Button, Card, 
   FormLabel, FormControlLabel, Checkbox 
 } from "@mui/material";
 import { useFormik } from "formik";
@@ -9,6 +8,7 @@ import { useNavigate, Link } from "react-router";
 import { useAuth } from "../../features/context/AuthContex.jsx";
 import { GoogleOAuthProvider, GoogleLogin } from "@react-oauth/google";
 import {jwtDecode} from "jwt-decode";
+import { useDispatch } from "react-redux";
 
 
 const validationSchema = Yup.object({
@@ -19,24 +19,28 @@ const validationSchema = Yup.object({
 function LoginPage() {
   const navigate = useNavigate();
   const { login, googleLogin } = useAuth();
+  const dispatch = useDispatch();
 
   const handleSubmit = (values) => {
-    const users = JSON.parse(localStorage.getItem("users")) || [];
-    const user = users.find(u => u.email === values.email && u.password === values.password);
 
-    if (user) {
-      login(values);
+    dispatch({type:"LOGIN", payload: values})
+    navigate("/", {replace:true})
+    // const users = JSON.parse(localStorage.getItem("users")) || [];
+    // const user = users.find(u => u.email === values.email && u.password === values.password);
 
-      if (values.rememberMe) {
-        localStorage.setItem("rememberedUser", JSON.stringify(user));
-      } else {
-        localStorage.removeItem("rememberedUser");
-      }
+    // if (user) {
+    //   login(values);
 
-      navigate("/");
-    } else {
-      alert("Невірна пошта або пароль!");
-    }
+    //   if (values.rememberMe) {
+    //     localStorage.setItem("rememberedUser", JSON.stringify(user));
+    //   } else {
+    //     localStorage.removeItem("rememberedUser");
+    //   }
+
+    //   navigate("/");
+    // } else {
+    //   alert("Невірна пошта або пароль!");
+    // }
   };
 
   const formik = useFormik({
